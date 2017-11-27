@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericInteractiveObject : MonoBehaviour, IActivatable {
-
+public class GenericInteractiveObject : MonoBehaviour, IActivatable
+{
 	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void Start ()
+    {
+        DoActivate();	
 	}
 
-    void IActivatable.DoActivate()
+    public void DoActivate()
     {
-        throw new System.NotImplementedException();
+        Debug.Log(this.name + " was activated");
     }
 }
