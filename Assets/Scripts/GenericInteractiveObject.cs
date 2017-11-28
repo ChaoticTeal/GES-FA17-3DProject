@@ -7,7 +7,7 @@ public class GenericInteractiveObject : MonoBehaviour, IActivatable
 	// Use this for initialization
 	void Start ()
     {
-        DoActivate();	
+
 	}
 
     public void DoActivate()
