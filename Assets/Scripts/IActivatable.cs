@@ -1,6 +1,5 @@
-﻿
-
-public interface IActivatable
+﻿public interface IActivatable 
 {
-    void DoActivate();
+   string NameText { get; }
+   void DoActivate();
 }

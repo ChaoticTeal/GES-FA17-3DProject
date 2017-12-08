@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class GenericInteractiveObject : MonoBehaviour, IActivatable
 {
-	// Use this for initialization
-	void Start ()
+    public string NameText
+    {
+        get
+        {
+            return "";
+        }
+    }
+
+    // Use this for initialization
+    void Start ()
     {
 
 	}

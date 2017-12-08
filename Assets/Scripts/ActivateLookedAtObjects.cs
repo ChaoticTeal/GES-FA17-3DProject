@@ -1,26 +1,55 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ActivateLookedAtObjects : MonoBehaviour
+public class ActivateLookedAtObjects : MonoBehaviour 
 {
     [SerializeField]
-    private float maxActivateDistance = 4.0f;
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        Debug.DrawRay(transform.position, transform.forward * maxActivateDistance, Color.cyan);
+    private float maxActivateDistance = 6.0f;
 
-        RaycastHit raycastHit;
-        if(Physics.Raycast(transform.position, transform.forward, out raycastHit, maxActivateDistance))
+    [SerializeField]
+    private Text lookedAtObjectText;
+
+    private IActivatable objectLookedAt;
+	
+	void FixedUpdate ()
+    {
+        Debug.DrawRay(transform.position, transform.forward * maxActivateDistance);
+
+        UpdateObjectLookedAt();
+        UpdateLookedAtObjectText();
+        ActivateLookedAtObject();
+    }
+
+    private void ActivateLookedAtObject()
+    {
+        if (objectLookedAt != null)
         {
-            //Debug.Log("Raycast hit " + raycastHit.transform.name);
-            IActivatable objectLookedAt = raycastHit.transform.GetComponent<IActivatable>();
-            if(objectLookedAt != null && Input.GetButtonDown("Activate"))
+            if (Input.GetButtonDown("Activate"))
             {
                 objectLookedAt.DoActivate();
             }
         }
-	}
+    }
+
+    private void UpdateLookedAtObjectText()
+    {
+        if (objectLookedAt != null)
+            lookedAtObjectText.text = objectLookedAt.NameText;
+        else
+            lookedAtObjectText.text = "";
+    }
+
+    private void UpdateObjectLookedAt()
+    {
+        RaycastHit hit;
+        objectLookedAt = null;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, maxActivateDistance))
+        {
+            objectLookedAt = hit.transform.GetComponent<IActivatable>();
+        }
+    }
 }
