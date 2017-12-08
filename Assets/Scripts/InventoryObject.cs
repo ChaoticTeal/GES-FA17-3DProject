@@ -10,7 +10,11 @@ public class InventoryObject : MonoBehaviour, IActivatable
     [SerializeField]
     private string descriptionText;
 
+    [SerializeField]
+    private Light light;
+
     private MeshRenderer meshRenderer;
+    private MeshRenderer[] childRenderers;
     private InventoryMenu inventoryMenu;
     private Collider collider;
 
@@ -29,6 +33,8 @@ public class InventoryObject : MonoBehaviour, IActivatable
         inventoryMenu = FindObjectOfType<InventoryMenu>();
         meshRenderer = GetComponent<MeshRenderer>();
         collider = GetComponent<Collider>();
+        childRenderers = GetComponentsInChildren<MeshRenderer>();
+        descriptionText = descriptionText.Replace("\\n", "\n");
     }
     public void DoActivate()
     {
@@ -40,7 +46,12 @@ public class InventoryObject : MonoBehaviour, IActivatable
         // Also, if you wanted to add sound effects here,
         // and we destroy before the sfx are done, it will not sound correct.
         // Just like how coin worked in our 2D project!
+        if (light != null)
+            light.enabled = false;
         meshRenderer.enabled = false;
+        if(childRenderers != null)
+            foreach (MeshRenderer r in childRenderers)
+                r.enabled = false;
         collider.enabled = false;        
     }
 }
