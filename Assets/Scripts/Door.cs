@@ -11,6 +11,11 @@ public class Door : MonoBehaviour, IActivatable
     [SerializeField]
     InventoryObject key;
 
+    [SerializeField]
+    bool needsSwitch;
+
+
+
     private Animator animator;
     private bool isLocked, isOpen;
     private List<InventoryObject> playerInventory;
@@ -27,6 +32,8 @@ public class Door : MonoBehaviour, IActivatable
                 toReturn += " (LOCKED)";
             else if (isLocked && HasKey)
                 toReturn += string.Format(" (use {0})", key.NameText);
+            else if (needsSwitch)
+                toReturn += " (FIND THE SWITCH)";
 
             return toReturn;
         }
@@ -44,7 +51,7 @@ public class Door : MonoBehaviour, IActivatable
     {
         if (!isOpen)
         {
-            if (!isLocked || HasKey)
+            if ((!isLocked || HasKey) || (needsSwitch && !switched)
             {
                 animator.SetBool("isDoorOpen", true); 
                 isOpen = true;
