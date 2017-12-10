@@ -25,6 +25,8 @@ public class InventoryMenu : MonoBehaviour
     private List<GameObject> menuItems;
     private string defaultDescriptionText;
 
+    public bool canPause = true;
+
     public List<InventoryObject> PlayerInventory { get; private set; }
 
     bool IsVisible
@@ -53,14 +55,15 @@ public class InventoryMenu : MonoBehaviour
     void Update () 
 	{
         HandleInput();
-
+        if (!canPause)
+            HideMenu();
         // It seems if you don't do this every frame, the cursor is not locked properly...
         UpdateCursor();
     }
 
     private void HandleInput()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") && canPause)
         {
             if (IsVisible)
             {

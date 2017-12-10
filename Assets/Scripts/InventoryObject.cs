@@ -13,6 +13,7 @@ public class InventoryObject : MonoBehaviour, IActivatable
     [SerializeField]
     private Light light;
 
+    private AudioSource audioSource;
     private MeshRenderer meshRenderer;
     private MeshRenderer[] childRenderers;
     private InventoryMenu inventoryMenu;
@@ -35,11 +36,12 @@ public class InventoryObject : MonoBehaviour, IActivatable
         collider = GetComponent<Collider>();
         childRenderers = GetComponentsInChildren<MeshRenderer>();
         descriptionText = descriptionText.Replace("\\n", "\n");
+        audioSource = GetComponent<AudioSource>();
     }
     public void DoActivate()
     {
         inventoryMenu.PlayerInventory.Add(this);
-
+        audioSource.Play();
         // Doing this rather than destroy because our Inventory menu still needs
         // to know about this object even though it has been collected and 
         // removed from the 3D world.

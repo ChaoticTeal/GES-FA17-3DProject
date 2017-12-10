@@ -5,20 +5,21 @@ using UnityEngine;
 public class Door : MonoBehaviour, IActivatable
 {
     [SerializeField]
-    string nameText;
+    protected string nameText;
 
     [Tooltip("If you set a key, the door will be locked.")]
     [SerializeField]
-    InventoryObject key;
+    protected InventoryObject key;
 
     [SerializeField]
-    bool needsSwitch;
+    protected Switch theSwitch;
 
 
 
-    private Animator animator;
-    private bool isLocked, isOpen;
-    private List<InventoryObject> playerInventory;
+    protected Animator animator;
+    protected bool isLocked, isOpen, needsSwitch;
+    protected List<InventoryObject> playerInventory;
+    protected AudioSource audioSource;
 
     public string NameText
     {
@@ -47,23 +48,33 @@ public class Door : MonoBehaviour, IActivatable
         }
     }
 
-    public void DoActivate()
+    public virtual void DoActivate()
     {
         if (!isOpen)
         {
-            if ((!isLocked || HasKey) || (needsSwitch && !switched)
+            if ((!isLocked && !needsSwitch || HasKey) || (needsSwitch && theSwitch.Active))
             {
-                animator.SetBool("isDoorOpen", true); 
+                animator.SetBool("isDoorOpen", true);
+                audioSource.Play();
                 isOpen = true;
             }
         }
     }
 
     // Use this for initialization
-    void Start () 
+    protected void Start () 
 	{
         animator = GetComponent<Animator>();
         playerInventory = FindObjectOfType<InventoryMenu>().PlayerInventory;
         isLocked = key != null;
+        needsSwitch = theSwitch != null;
+        audioSource = GetComponent<AudioSource>();
 	}
+
+    void Update()
+    {
+        if(needsSwitch)
+            if (theSwitch.Active)
+                DoActivate();
+    }
 }
